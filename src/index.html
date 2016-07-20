@@ -23,14 +23,16 @@
         <p>Pick your sequence and press the button.</p>
 
         <form action="">
-            <input type="radio" name="first" value="heads" checked>Heads
-            <input type="radio" name="first" value="tails">Tails<br>
-            <input type="radio" name="second" value="heads" checked>Heads
-            <input type="radio" name="second" value="tails">Tails<br>
-            <input type="radio" name="third" value="heads" checked>Heads
-            <input type="radio" name="third" value="tails">Tails<br>
+            <input id="firstHeads" type="radio" name="first" value="heads" checked>Heads
+            <input id="firstTails" type="radio" name="first" value="tails">Tails<br>
+            <input id="secondHeads" type="radio" name="second" value="heads" checked>Heads
+            <input id="secondTails" type="radio" name="second" value="tails">Tails<br>
+            <input id="thirdHeads" type="radio" name="third" value="heads" checked>Heads
+            <input id="thirdTails" type="radio" name="third" value="tails">Tails<br>
         </form>
-        <button type="button">Go!</button>
+
+        <button id="goButton" type="button">Go!</button>
+        <button id="stopButton" type="button" disabled>Stop.</button>
 
         <script src="https://code.jquery.com/jquery-{{JQUERY_VERSION}}.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-{{JQUERY_VERSION}}.min.js"><\/script>')</script>
