@@ -88,6 +88,14 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+.title {
+    text-align: center;
+}
+
 .history {
     white-space: nowrap;
     overflow-x: scroll;
