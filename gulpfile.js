@@ -3,6 +3,8 @@ var path = require('path');
 
 var gulp = require('gulp');
 
+require('es6-promise').polyfill();
+
 // Load all gulp plugins automatically
 // and attach them to the `plugins` object
 var plugins = require('gulp-load-plugins')();
