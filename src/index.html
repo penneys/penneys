@@ -22,19 +22,24 @@
         <![endif]-->
 
         <h1 class="title">Coinage</h1>
-        <p>Pick your sequence and press the button.</p>
+        <div class="centered">Pick your sequence and press the button.</div>
 
-        <form action="">
+        <div class="centered">
             <input id="firstHeads" type="radio" name="first" value="heads" checked>Heads
-            <input id="firstTails" type="radio" name="first" value="tails">Tails<br>
+            <input id="firstTails" type="radio" name="first" value="tails">Tails
+        </div>
+        <div class="centered">
             <input id="secondHeads" type="radio" name="second" value="heads" checked>Heads
-            <input id="secondTails" type="radio" name="second" value="tails">Tails<br>
+            <input id="secondTails" type="radio" name="second" value="tails">Tails
+        </div>
+        <div class="centered">
             <input id="thirdHeads" type="radio" name="third" value="heads" checked>Heads
-            <input id="thirdTails" type="radio" name="third" value="tails">Tails<br>
-        </form>
+            <input id="thirdTails" type="radio" name="third" value="tails">Tails
+        </div>
 
-        <button id="goButton" type="button">Go!</button>
-        <button id="stopButton" type="button" disabled>Stop.</button>
+        <div class="centered">
+            <button id="goButton" type="button" class="positive-button">Go</button><button id="stopButton" type="button" class="negative-button" disabled>Stop</button>
+        </div>
 
         <script src="https://code.jquery.com/jquery-{{JQUERY_VERSION}}.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-{{JQUERY_VERSION}}.min.js"><\/script>')</script>

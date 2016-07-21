@@ -94,11 +94,44 @@ body {
 
 .title {
     text-align: center;
+    font-size: 3em;
+}
+
+.centered {
+    text-align: center;
+}
+
+.sequence {
+    white-space: nowrap;
+    font-size: 2em;
 }
 
 .history {
     white-space: nowrap;
     overflow-x: scroll;
+}
+
+button {
+    height: 4em;
+    width: 20em;
+    border: none;
+    margin: 2em 0;
+}
+
+.positive-button {
+    background-color: #2a2;
+}
+
+.positive-button:disabled {
+    background-color: #ddd;
+}
+
+.negative-button {
+    background-color: #a22;
+}
+
+.negative-button:disabled {
+    background-color: #ddd;
 }
 
 /* ==========================================================================
@@ -186,8 +219,8 @@ body {
 }
 
 @media print,
-       (min-resolution: 1.25dppx),
-       (min-resolution: 120dpi) {
+(min-resolution: 1.25dppx),
+(min-resolution: 120dpi) {
     /* Style adjustments for high resolution devices */
 }
 
@@ -204,8 +237,9 @@ body {
     *:first-letter,
     *:first-line {
         background: transparent !important;
-        color: #000 !important; /* Black prints faster:
-                                   http://www.sanbeiji.com/archives/953 */
+        color: #000 !important;
+        /* Black prints faster:
+                                          http://www.sanbeiji.com/archives/953 */
         box-shadow: none !important;
         text-shadow: none !important;
     }
@@ -227,7 +261,6 @@ body {
      * Don't show links that are fragment identifiers,
      * or use the `javascript:` pseudo protocol
      */
-
     a[href^="#"]:after,
     a[href^="javascript:"]:after {
         content: "";
@@ -243,7 +276,6 @@ body {
      * Printing Tables:
      * http://css-discuss.incutio.com/wiki/Printing_Tables
      */
-
     thead {
         display: table-header-group;
     }
