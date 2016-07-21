@@ -13,79 +13,6 @@ const radioButtons = headsButtons.concat(tailsButtons);
 
 var game = {};
 
-function disableRadioButtons() {
-    for (var i = 0; i < radioButtons.length; i++) {
-        document.getElementById(radioButtons[i]).disabled = true;
-    }
-}
-
-function enableRadioButtons() {
-    for (var i = 0; i < radioButtons.length; i++) {
-        document.getElementById(radioButtons[i]).disabled = false;
-    }
-}
-
-function stringFromCoinSequence(sequence) {
-    return sequence.map(function (coin) {
-        return coin ? "T" : "H";
-    }).join("");
-}
-
-function updateScoreboard(player, computer) {
-    document.getElementById("scoreboard").hidden = false;
-    document.getElementById("playerSequence").innerHTML = stringFromCoinSequence(player.sequence);
-    document.getElementById("playerScore").innerHTML = player.score.toString();
-    document.getElementById("computerSequence").innerHTML = stringFromCoinSequence(computer.sequence);
-    document.getElementById("computerScore").innerText = computer.score.toString();
-}
-
-/**
- * If the game is not running, creates a Game object according to the user-defined settings and enters the game loop.
- */
-function clickedGo() {
-    disableRadioButtons();
-    disableButtons();
-    game.player = {
-        sequence: getPlayerSequence(),
-        score: 0
-    };
-    game.computer = {
-        sequence: deriveBestSequence(game.player.sequence),
-        score: 0
-    };
-    game.history = [];
-    game.lastUpdate = window.performance.now();
-    game.running = true;
-    updateScoreboard(game.player, game.computer);
-    enableStopButton();
-    requestAnimationFrame(updateGame);
-}
-
-function disableButtons() {
-    getGoButton().disabled = true;
-    getStopButton().disabled = true;
-}
-
-function enableGoButton() {
-    getGoButton().disabled = false;
-}
-
-function enableStopButton() {
-    getStopButton().disabled = false;
-}
-
-/**
- * If the game is running, stops it.
- */
-function clickedStop() {
-    disableButtons();
-    if (game.running) {
-        game.running = false;
-        enableRadioButtons();
-        enableGoButton();
-    }
-}
-
 /**
  * Returns a pseudo-random coin toss.
  */
@@ -100,19 +27,33 @@ function invertCoin(coin) {
     return !coin;
 }
 
+function stringFromCoinSequence(sequence) {
+    return sequence.map(function (coin) {
+        return coin ? "T" : "H";
+    }).join("");
+}
+
 function coinSequenceEquals(sequence, lastThreeTosses) {
-    if (sequence == null && lastThreeTosses == null) {
+    if (sequence === null && lastThreeTosses === null) {
         return true;
     }
-    if (sequence == null || lastThreeTosses == null || sequence.length != lastThreeTosses.length) {
+    if (sequence === null || lastThreeTosses === null || sequence.length !== lastThreeTosses.length) {
         return false;
     }
     for (var i = 0; i < sequence.length; i++) {
-        if (sequence[i] != lastThreeTosses[i]) {
+        if (sequence[i] !== lastThreeTosses[i]) {
             return false;
         }
     }
     return true;
+}
+
+function updateScoreboard(player, computer) {
+    document.getElementById("scoreboard").hidden = false;
+    document.getElementById("playerSequence").innerHTML = stringFromCoinSequence(player.sequence);
+    document.getElementById("playerScore").innerHTML = player.score.toString();
+    document.getElementById("computerSequence").innerHTML = stringFromCoinSequence(computer.sequence);
+    document.getElementById("computerScore").innerText = computer.score.toString();
 }
 
 function updateGame(currentTime) {
@@ -162,6 +103,65 @@ function getGoButton() {
 
 function getStopButton() {
     return document.getElementById("stopButton");
+}
+
+function disableRadioButtons() {
+    for (var i = 0; i < radioButtons.length; i++) {
+        document.getElementById(radioButtons[i]).disabled = true;
+    }
+}
+
+function enableRadioButtons() {
+    for (var i = 0; i < radioButtons.length; i++) {
+        document.getElementById(radioButtons[i]).disabled = false;
+    }
+}
+
+function disableButtons() {
+    getGoButton().disabled = true;
+    getStopButton().disabled = true;
+}
+
+function enableGoButton() {
+    getGoButton().disabled = false;
+}
+
+function enableStopButton() {
+    getStopButton().disabled = false;
+}
+
+/**
+ * If the game is not running, creates a Game object according to the user-defined settings and enters the game loop.
+ */
+function clickedGo() {
+    disableRadioButtons();
+    disableButtons();
+    game.player = {
+        sequence: getPlayerSequence(),
+        score: 0
+    };
+    game.computer = {
+        sequence: deriveBestSequence(game.player.sequence),
+        score: 0
+    };
+    game.history = [];
+    game.lastUpdate = window.performance.now();
+    game.running = true;
+    updateScoreboard(game.player, game.computer);
+    enableStopButton();
+    requestAnimationFrame(updateGame);
+}
+
+/**
+ * If the game is running, stops it.
+ */
+function clickedStop() {
+    disableButtons();
+    if (game.running) {
+        game.running = false;
+        enableRadioButtons();
+        enableGoButton();
+    }
 }
 
 // Add listeners.
