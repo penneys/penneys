@@ -89,7 +89,7 @@ textarea {
    ========================================================================== */
 
 body {
-    font-family: 'Lato', sans-serif;
+    font-family: "Lato", sans-serif;
 }
 
 .title {
@@ -112,26 +112,47 @@ body {
 }
 
 button {
-    height: 4em;
-    width: 20em;
+    font-family: "Lato", sans-serif;
+    font-size: 1.5em;
+    height: 4rem;
+    width: 20rem; /* The width of the two visual columns of the site. */
     border: none;
     margin: 2em 0;
 }
 
 .positive-button {
     background-color: #2a2;
+    font-weight: bold;
 }
 
 .positive-button:disabled {
     background-color: #ddd;
+    font-weight: normal;
 }
 
 .negative-button {
     background-color: #a22;
+    font-weight: bold;
 }
 
 .negative-button:disabled {
     background-color: #ddd;
+    font-weight: normal;
+}
+
+.statistics-title {
+    width: 20em;
+}
+
+table {
+    table-layout: fixed;
+    width: 40rem;
+    margin: 0 auto;
+}
+
+tr, td, th {
+    text-align: center;
+    border: 0;
 }
 
 /* ==========================================================================

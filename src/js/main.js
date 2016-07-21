@@ -25,6 +25,20 @@ function enableRadioButtons() {
     }
 }
 
+function stringFromCoinSequence(sequence) {
+    return sequence.map(function (coin) {
+        return coin ? "T" : "H";
+    }).join("");
+}
+
+function updateScoreboard(player, computer) {
+    document.getElementById("scoreboard").hidden = false;
+    document.getElementById("playerSequence").innerHTML = stringFromCoinSequence(player.sequence);
+    document.getElementById("playerScore").innerHTML = player.score.toString();
+    document.getElementById("computerSequence").innerHTML = stringFromCoinSequence(computer.sequence);
+    document.getElementById("computerScore").innerText = computer.score.toString();
+}
+
 /**
  * If the game is not running, creates a Game object according to the user-defined settings and enters the game loop.
  */
@@ -40,8 +54,11 @@ function clickedGo() {
         score: 0
     };
     game.history = [];
+    game.lastUpdate = window.performance.now();
     game.running = true;
+    updateScoreboard(game.player, game.computer);
     enableStopButton();
+    requestAnimationFrame(updateGame);
 }
 
 function disableButtons() {
@@ -83,18 +100,45 @@ function invertCoin(coin) {
     return !coin;
 }
 
-function updateGame(game) {
-    game.history.push(tossCoin());
+function coinSequenceEquals(sequence, lastThreeTosses) {
+    if (sequence == null && lastThreeTosses == null) {
+        return true;
+    }
+    if (sequence == null || lastThreeTosses == null || sequence.length != lastThreeTosses.length) {
+        return false;
+    }
+    for (var i = 0; i < sequence.length; i++) {
+        if (sequence[i] != lastThreeTosses[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
-function updateScores(game) {
-    if (game.history.length >= 3) {
-        const lastThreeTosses = game.history.slice(-3);
-        if (game.player.sequence == lastThreeTosses) {
-            game.player.score++;
-        } else if (game.computer.sequence == lastThreeTosses) {
-            game.computer.score++;
+function updateGame(currentTime) {
+    function eraseGameHistory() {
+        while (game.history.length > 0) {
+            game.history.pop();
         }
+    }
+
+    if (game.running) {
+        if (game.lastUpdate + UPDATE_INTERVAL <= currentTime) {
+            game.lastUpdate = currentTime;
+            game.history.push(tossCoin());
+            if (game.history.length >= 3) {
+                const lastThreeTosses = game.history.slice(-3);
+                if (coinSequenceEquals(game.player.sequence, lastThreeTosses)) {
+                    game.player.score++;
+                    eraseGameHistory();
+                } else if (coinSequenceEquals(game.computer.sequence, lastThreeTosses)) {
+                    game.computer.score++;
+                    eraseGameHistory();
+                }
+            }
+            updateScoreboard(game.player, game.computer);
+        }
+        requestAnimationFrame(updateGame);
     }
 }
 
