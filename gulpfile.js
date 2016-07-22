@@ -74,6 +74,7 @@ gulp.task('copy', [
     'copy:jquery',
     'copy:license',
     'copy:main.css',
+    'copy:favicons',
     'copy:misc',
     'copy:normalize'
 ]);
@@ -97,8 +98,7 @@ gulp.task('copy:jquery', function () {
 });
 
 gulp.task('copy:license', function () {
-    return gulp.src('LICENSE.txt')
-               .pipe(gulp.dest(dirs.dist));
+    return gulp.src('LICENSE.txt').pipe(gulp.dest(dirs.dist));
 });
 
 gulp.task('copy:main.css', function () {
@@ -114,6 +114,13 @@ gulp.task('copy:main.css', function () {
                    cascade: false
                }))
                .pipe(gulp.dest(dirs.dist + '/css'));
+});
+
+gulp.task('copy:favicons', function () {
+    var favicons = dirs.src + '/img/favicons/';
+    return gulp.src([favicons + '*'])
+        .pipe(plugins.flatten())
+        .pipe(gulp.dest(dirs.dist));
 });
 
 gulp.task('copy:misc', function () {
