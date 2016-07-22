@@ -53,7 +53,7 @@ function updateScoreboard(player, computer) {
     document.getElementById("playerSequence").innerHTML = stringFromCoinSequence(player.sequence);
     document.getElementById("playerScore").innerHTML = player.score.toString();
     document.getElementById("computerSequence").innerHTML = stringFromCoinSequence(computer.sequence);
-    document.getElementById("computerScore").innerText = computer.score.toString();
+    document.getElementById("computerScore").innerHTML = computer.score.toString();
 }
 
 function updateGame(currentTime) {
