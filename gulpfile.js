@@ -132,6 +132,8 @@ gulp.task('copy:misc', function () {
         // Exclude the following files
         // (other tasks will handle the copying of these files)
         '!' + dirs.src + '/css/main.css',
+        '!' + dirs.src + '/js/main.js',
+        '!' + dirs.src + '/js/plugins.js',
         '!' + dirs.src + '/index.html'
 
     ], {
@@ -158,6 +160,16 @@ gulp.task('lint:js', function () {
       .pipe(plugins.jshint.reporter('fail'));
 });
 
+gulp.task('compress', function() {
+    return gulp.src(dirs.src + '/js/*.js')
+        .pipe(plugins.minify({
+            ext: {
+                min: '.js'
+            },
+            noSource: true
+        }))
+        .pipe(gulp.dest(dirs.dist + '/js'));
+});
 
 // ---------------------------------------------------------------------
 // | Main tasks                                                        |
@@ -174,6 +186,7 @@ gulp.task('archive', function (done) {
 gulp.task('build', function (done) {
     runSequence(
         ['clean', 'lint:js'],
+        'compress',
         'copy',
     done);
 });
