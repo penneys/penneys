@@ -5,7 +5,14 @@
  * functions for dealing with such arrays so that internal representation changes do not require massive refactorings.
  */
 
-const UPDATE_INTERVAL = 200; // 200 ms between tosses.
+const SLOW_SIMULATION_SPEED = 1;
+const FAST_SIMULATION_SPEED = 2;
+
+const SLOW_SIMULATION_UPDATE_INTERVAL = 500; // 500 ms between tosses.
+const FAST_SIMULATION_UPDATE_INTERVAL = 100; // 200 ms between iterations.
+
+const SLOW_SIMULATION_TOSS_COUNT = 1;
+const FAST_SIMULATION_TOSS_COUNT = 100;
 
 const headsButtons = ["firstHeads", "secondHeads", "thirdHeads"];
 const tailsButtons = ["firstTails", "secondTails", "thirdTails"];
@@ -48,19 +55,32 @@ function coinSequenceEquals(sequence, lastThreeTosses) {
     return true;
 }
 
+/**
+ * Returns the simulation speed as a small positive integer.
+ */
+function getSimulationSpeed() {
+    if (document.getElementById("radioSlow").checked) {
+        return SLOW_SIMULATION_SPEED;
+    } else {
+        return FAST_SIMULATION_SPEED;
+    }
+}
+
 function updateScoreboard(player, computer) {
-    document.getElementById("scoreboard").hidden = false;
     document.getElementById("playerSequence").innerHTML = stringFromCoinSequence(player.sequence);
     document.getElementById("playerScore").innerHTML = player.score.toString();
     document.getElementById("computerSequence").innerHTML = stringFromCoinSequence(computer.sequence);
     document.getElementById("computerScore").innerHTML = computer.score.toString();
 }
 
-function updateSequenceWindow(history) {
+function updateSequenceWindow(history, simulationSpeed) {
     var element = document.getElementById("sequenceWindow");
-    element.hidden = false;
-    element.innerHTML = stringFromCoinSequence(history);
-    element.scrollLeft = element.scrollWidth;
+    if (simulationSpeed === SLOW_SIMULATION_SPEED) {
+        element.innerHTML = stringFromCoinSequence(history);
+        element.scrollLeft = element.scrollWidth;
+    } else {
+        element.innerHTML = "History not available."; // This may be unnecessarily expensive.
+    }
 }
 
 function updateGame(currentTime) {
@@ -70,11 +90,29 @@ function updateGame(currentTime) {
         }
     }
 
-    if (game.running) {
-        if (game.lastUpdate + UPDATE_INTERVAL <= currentTime) {
-            game.lastUpdate = currentTime;
+    function getSimulationUpdateInterval(simulationSpeed) {
+        if (simulationSpeed === SLOW_SIMULATION_SPEED) {
+            return SLOW_SIMULATION_UPDATE_INTERVAL;
+        } else {
+            return FAST_SIMULATION_UPDATE_INTERVAL;
+        }
+    }
+
+    /**
+     * Returns how many tosses should be simulated per step for the given simulation speed.
+     */
+    function getTossCount(simulationSpeed) {
+        if (simulationSpeed === SLOW_SIMULATION_SPEED) {
+            return SLOW_SIMULATION_TOSS_COUNT;
+        } else {
+            return FAST_SIMULATION_TOSS_COUNT;
+        }
+    }
+
+    function simulateTosses(game, simulationSpeed) {
+        for (var i = 0; i < getTossCount(simulationSpeed); i++) {
             game.history.push(tossCoin());
-            updateSequenceWindow(game.history);
+            updateSequenceWindow(game.history, simulationSpeed);
             if (game.history.length >= 3) {
                 const lastThreeTosses = game.history.slice(-3);
                 if (coinSequenceEquals(game.player.sequence, lastThreeTosses)) {
@@ -86,6 +124,15 @@ function updateGame(currentTime) {
                 }
             }
             updateScoreboard(game.player, game.computer);
+        }
+    }
+
+    if (game.running) {
+        var simulationSpeed = getSimulationSpeed();
+        var updateInterval = getSimulationUpdateInterval(simulationSpeed);
+        if (game.lastUpdate + updateInterval <= currentTime) {
+            game.lastUpdate = currentTime;
+            simulateTosses(game, simulationSpeed);
         }
         requestAnimationFrame(updateGame);
     }
@@ -138,6 +185,10 @@ function enableStopButton() {
     getStopButton().disabled = false;
 }
 
+function showReporting() {
+    document.getElementById("reporting").hidden = false;
+}
+
 /**
  * If the game is not running, creates a Game object according to the user-defined settings and enters the game loop.
  */
@@ -155,6 +206,7 @@ function clickedGo() {
     game.history = [];
     game.lastUpdate = window.performance.now();
     game.running = true;
+    showReporting();
     updateScoreboard(game.player, game.computer);
     enableStopButton();
     requestAnimationFrame(updateGame);
