@@ -12,4 +12,4 @@ git commit -am "Updated the website"
 git push
 
 cd ..
-rm -rf contagium.github.io
+rm -rf penneys.github.io
